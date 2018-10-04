@@ -331,5 +331,79 @@ C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\stdio.h
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\corecrt_wstdio.h
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\corecrt_stdio_config.h
 E:\CUDA_9.2\include\cuda_runtime_api.h
+E:\mvs\VC\include\iostream
+E:\mvs\VC\include\istream
+E:\mvs\VC\include\ostream
+E:\mvs\VC\include\ios
+E:\mvs\VC\include\xlocnum
+E:\mvs\VC\include\climits
+E:\mvs\VC\include\cstdio
+E:\mvs\VC\include\streambuf
+E:\mvs\VC\include\xiosbase
+E:\mvs\VC\include\xlocale
+E:\mvs\VC\include\cstring
+E:\mvs\VC\include\stdexcept
+E:\mvs\VC\include\exception
+E:\mvs\VC\include\type_traits
+E:\mvs\VC\include\xstddef
+E:\mvs\VC\include\cstddef
+E:\mvs\VC\include\initializer_list
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\malloc.h
+E:\mvs\VC\include\vcruntime_exception.h
+E:\mvs\VC\include\eh.h
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\corecrt_terminate.h
+E:\mvs\VC\include\xstring
+E:\mvs\VC\include\xmemory0
+E:\mvs\VC\include\cstdint
+E:\mvs\VC\include\stdint.h
+E:\mvs\VC\include\vcruntime.h
+E:\mvs\VC\include\limits
+E:\mvs\VC\include\ymath.h
+E:\mvs\VC\include\cfloat
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\float.h
+E:\mvs\VC\include\cwchar
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\wchar.h
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\corecrt_wconio.h
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\corecrt_wctype.h
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\corecrt_wdirect.h
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\corecrt_wio.h
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\corecrt_share.h
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\corecrt_wprocess.h
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\sys/stat.h
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\sys/types.h
+E:\mvs\VC\include\new
+E:\mvs\VC\include\vcruntime_new.h
+E:\mvs\VC\include\vcruntime.h
+E:\mvs\VC\include\xutility
+E:\mvs\VC\include\utility
+E:\mvs\VC\include\iosfwd
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\crtdbg.h
+E:\mvs\VC\include\vcruntime_new_debug.h
+E:\mvs\VC\include\xatomic0.h
+E:\mvs\VC\include\intrin.h
+E:\mvs\VC\include\vcruntime.h
+E:\mvs\VC\include\setjmp.h
+E:\mvs\VC\include\vcruntime.h
+E:\mvs\VC\include\immintrin.h
+E:\mvs\VC\include\wmmintrin.h
+E:\mvs\VC\include\nmmintrin.h
+E:\mvs\VC\include\smmintrin.h
+E:\mvs\VC\include\tmmintrin.h
+E:\mvs\VC\include\pmmintrin.h
+E:\mvs\VC\include\emmintrin.h
+E:\mvs\VC\include\xmmintrin.h
+E:\mvs\VC\include\mmintrin.h
+E:\mvs\VC\include\ammintrin.h
+E:\mvs\VC\include\typeinfo
+E:\mvs\VC\include\vcruntime_typeinfo.h
+E:\mvs\VC\include\vcruntime.h
+E:\mvs\VC\include\xlocinfo
+E:\mvs\VC\include\xlocinfo.h
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\ctype.h
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\locale.h
+E:\mvs\VC\include\xfacet
+E:\mvs\VC\include\system_error
+E:\mvs\VC\include\cerrno
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\share.h
 e:\vsprojects\axpy_gpu\axpy_gpu\gpu_axpy.cuh
 E:\CUDA_9.2\include\cuda_runtime_api.h

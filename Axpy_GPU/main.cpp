@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <cstdlib>
 #include <cuda_runtime_api.h>
+#include <iostream>
 #include "gpu_axpy.cuh"
 // BLAS incy, incx == 1
 
@@ -73,8 +74,10 @@ int main(int argc, char **argv) {
 	a = atof(argv[4]);
 	*/
 	//end_of_double
-
-
+	struct cudaDeviceProp properties;
+	cudaGetDeviceProperties(&properties, 0);
+	cout << "using " << properties.multiProcessorCount << " multiprocessors" << endl;
+	cout << "max threads per processor: " << properties.maxThreadsPerMultiProcessor << endl;
 	//printf("%.2f\n", a);
 	for (int i = 0; i < N; ++i) {
 		x[i] = (float)i;
@@ -91,8 +94,7 @@ int main(int argc, char **argv) {
 	cudaMemcpy(x_gpu, x, N*(sizeof(float)), cudaMemcpyHostToDevice);
 	cudaMemcpy(y_gpu, y, N*(sizeof(float)), cudaMemcpyHostToDevice);
 	//begin of float
-
-	saxpy_gpu<<<blockSize, (blockSize  + N) / blockSize>>> (N, a, x_gpu, incx, y_gpu, incy, res_gpu);
+	saxpy_gpu<<<(blockSize + N) / blockSize, blockSize>>> (N, a, x_gpu, incx, y_gpu, incy, res_gpu);
 	printf(cudaGetErrorString(cudaGetLastError()));
 	printf("\n");
 	cudaMemcpy(res_gpu_host, res_gpu, N * sizeof(float), cudaMemcpyDeviceToHost);
