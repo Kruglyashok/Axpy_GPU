@@ -11,9 +11,11 @@ using namespace std;
 
 template<typename T> bool checkResult(T* vec1, T* vec2, int n) {
 	for (int i = 0; i < n; ++i) 
-		if (vec1[i] != vec2[i]) return false;
+		if (vec1[i] - vec2[i] > 0.5) return false;
 	return true;
 }
+
+
 
 void saxpy(int n, float a, float *x, int incx, float *y, int incy, float *res) {
 	printf("start saxpy\n");
@@ -78,10 +80,10 @@ int main(int argc, char **argv) {
 	cudaGetDeviceProperties(&properties, 0);
 	cout << "using " << properties.multiProcessorCount << " multiprocessors" << endl;
 	cout << "max threads per processor: " << properties.maxThreadsPerMultiProcessor << endl;
-	//printf("%.2f\n", a);
+	printf("%.2f\n", a);
 	for (int i = 0; i < N; ++i) {
-		x[i] = (float)i;
-		y[i] = (float)i;
+		x[i] = (rand() % 100);
+		y[i] = (rand() % 100);
 		res[i] = (float)0;
 		res_gpu_host[i] = (float)0;
 	}
@@ -90,18 +92,21 @@ int main(int argc, char **argv) {
 	clock_t end_time = clock();
 	time = (float)(end_time - start_time) / CLOCKS_PER_SEC;
 	
-	start_time = clock();
+	
 	cudaMemcpy(x_gpu, x, N*(sizeof(float)), cudaMemcpyHostToDevice);
 	cudaMemcpy(y_gpu, y, N*(sizeof(float)), cudaMemcpyHostToDevice);
 	//begin of float
+	start_time = clock();
 	saxpy_gpu<<<(blockSize + N) / blockSize, blockSize>>> (N, a, x_gpu, incx, y_gpu, incy, res_gpu);
-	printf(cudaGetErrorString(cudaGetLastError()));
-	printf("\n");
+	end_time = clock();
 	cudaMemcpy(res_gpu_host, res_gpu, N * sizeof(float), cudaMemcpyDeviceToHost);
 	//end of float
-
 	cudaDeviceSynchronize();
-	time_gpu = (float)(clock() - start_time) / CLOCKS_PER_SEC;
+	
+
+	printf(cudaGetErrorString(cudaGetLastError()));
+	printf("\n");
+	time_gpu = (float)(end_time - start_time) / CLOCKS_PER_SEC;
 	/*printf("x:\n");
 	showVec(N, x);
 	printf("y:\n");
@@ -110,7 +115,7 @@ int main(int argc, char **argv) {
 	showVec(N, res);
 	printf("res_gpu_host:\n");
 	showVec(N, res_gpu_host);*/
-	printf("time: %10.4g\n", time);
+	printf("time: %6.4g\n", time);
 	printf("time_gpu: %10.4g\n", time_gpu);
 	printf(checkResult(res, res_gpu_host, N) ? "Equal": "Not Equal");
 	cudaFree(x_gpu); cudaFree(y_gpu); cudaFree(res_gpu);
