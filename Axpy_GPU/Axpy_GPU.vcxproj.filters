@@ -15,13 +15,13 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <CudaCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </CudaCompile>
     <CudaCompile Include="gpu_axpy.cuh">
       <Filter>Header Files</Filter>
     </CudaCompile>
     <CudaCompile Include="gpu_axpy.cu">
+      <Filter>Source Files</Filter>
+    </CudaCompile>
+    <CudaCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </CudaCompile>
   </ItemGroup>
