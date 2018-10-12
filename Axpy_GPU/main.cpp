@@ -60,12 +60,12 @@ int main(int argc, char **argv) {
 	int N;
 	//float
 	float a, *x, *x_gpu, *y, *y_gpu, *res, *res_omp, *res_gpu, *res_gpu_host, time_cpu_f, time_gpu_f, time_omp_f;
-	double a_d, *x_d, *x_gpu_d, *y_d, *y_gpu_d, *res_d, *res_omp_d, res_gpu_d, *res_gpu_host_d, time_cpu_d, time_gpu_d, time_omp_d;
+	double  *x_d, *x_gpu_d, *y_d, *y_gpu_d, *res_d, *res_omp_d, *res_gpu_d, *res_gpu_host_d, time_cpu_d, time_gpu_d, time_omp_d;
 
 	int incx, incy, blockSize;
 
 	N = atoi(argv[1]); // number of elements in the vector
-	
+
 	x = (float*)malloc(N * sizeof(float));
 	y = (float*)malloc(N * sizeof(float));
 	res = (float*)malloc(N * sizeof(float));
@@ -75,50 +75,38 @@ int main(int argc, char **argv) {
 	cudaMalloc((void**)&x_gpu, N * sizeof(float));
 	cudaMalloc((void**)&y_gpu, N * sizeof(float));
 	cudaMalloc((void**)&res_gpu, N * sizeof(float));
-	
+
+	x_d = (double*)malloc(N * sizeof(double));
+	y_d = (double*)malloc(N * sizeof(double));
+	res_d = (double*)malloc(N * sizeof(double));
+	res_gpu_host_d = (double*)malloc(N * sizeof(double));
+	res_omp_d = (double*)malloc(N * sizeof(double));
+
+	cudaMalloc((void**)&x_gpu_d, N * sizeof(double));
+	cudaMalloc((void**)&y_gpu_d, N * sizeof(double));
+	cudaMalloc((void**)&res_gpu_d, N * sizeof(double));
+
+
 	incx = atoi(argv[2]);  //increment for x
 	incy = atoi(argv[3]); //increment for y
 	a = atof(argv[4]); // coefficient for sum of vecs
 	blockSize = atoi(argv[5]); //size of cuda blocks
-	//end_of_float
 
-	//double
-	/*a_d = (double)a;
-	x_d = (float*)malloc(N * sizeof(float));
-	y_d = (float*)malloc(N * sizeof(float));
-	res_d = (float*)malloc(N * sizeof(float));
-	res_gpu_host = (float*)malloc(N * sizeof(float));
-
-	cudaMalloc((void**)&x_gpu, N * sizeof(float));
-	cudaMalloc((void**)&y_gpu, N * sizeof(float));
-	cudaMalloc((void**)&res_gpu, N * sizeof(float));
-
-*/
-	/*
-	double a, *x, *y, *res;
-	int incx, incy;
-
-	x = (double*)malloc(N*sizeof(double));
-	y = (double*)malloc(N * sizeof(double));
-	res = (double*)malloc(N * sizeof(double));
-
-	N = atoi(argv[1]);
-	incx = atoi(argv[2]);
-	incy = atoi(argv[3]);
-	a = atof(argv[4]);
-	*/
-	//end_of_double
-	struct cudaDeviceProp properties;
-	cudaGetDeviceProperties(&properties, 0);
-	cout << "using " << properties.multiProcessorCount << " multiprocessors" << endl;
-	cout << "max threads per processor: " << properties.maxThreadsPerMultiProcessor << endl;
-	printf("%.2f\n", a);
+	//struct cudaDeviceProp properties;
+	//cudaGetDeviceProperties(&properties, 0);
+	//cout << "using " << properties.multiProcessorCount << " multiprocessors" << endl;
+	//cout << "max threads per processor: " << properties.maxThreadsPerMultiProcessor << endl;
+	//printf("%.2f\n", a);
 	for (int i = 0; i < N; ++i) {
 		x[i] = (rand() % 100);
 		y[i] = (rand() % 100);
 
-		//res[i] = (float)0;
-		//res_gpu_host[i] = (float)0;
+		res[i] = (float)0;
+		res_gpu_host[i] = (float)0;
+	}
+	for (int i = 0; i < N; ++i) {
+		x_d[i] = (double)x[i];
+		y_d[i] = (double)y[i];
 	}
 	clock_t start_time = clock();
 	saxpy(N, a, x, incx, y, incy, res);
@@ -126,15 +114,33 @@ int main(int argc, char **argv) {
 	time_cpu_f = (float)(end_time - start_time) / CLOCKS_PER_SEC;
 	
 	start_time = clock();
+	daxpy(N, a, x_d, incx, y_d, incy, res_d);
+	end_time = clock();
+	time_cpu_d = (double)(end_time - start_time) / CLOCKS_PER_SEC;
+
+	start_time = clock();
+	daxpy_omp(N, a, x_d, incx, y_d, incy, res_omp_d);
+	end_time = clock();
+	time_omp_d = (double)(end_time - start_time) / CLOCKS_PER_SEC;
+
+	start_time = clock();
+	cudaMemcpy(x_gpu_d, x_d, N*(sizeof(double)), cudaMemcpyHostToDevice);
+	cudaMemcpy(y_gpu_d, y_d, N*(sizeof(double)), cudaMemcpyHostToDevice);
+	daxpy_gpu<<<(blockSize + N) / blockSize, blockSize >> > (N, a, x_gpu_d, incx, y_gpu_d, incy, res_gpu_d);
+	cudaMemcpy(res_gpu_host_d, res_gpu_d, N * sizeof(double), cudaMemcpyDeviceToHost);
+	cudaDeviceSynchronize();
+	end_time = clock();
+	time_gpu_d = (float)(end_time - start_time) / CLOCKS_PER_SEC;
+
+	start_time = clock();
 	cudaMemcpy(x_gpu, x, N*(sizeof(float)), cudaMemcpyHostToDevice);
 	cudaMemcpy(y_gpu, y, N*(sizeof(float)), cudaMemcpyHostToDevice);
 	saxpy_gpu<<<(blockSize + N) / blockSize, blockSize>>> (N, a, x_gpu, incx, y_gpu, incy, res_gpu);
 	cudaMemcpy(res_gpu_host, res_gpu, N * sizeof(float), cudaMemcpyDeviceToHost);
 	cudaDeviceSynchronize();
 	end_time = clock();
-	//end of float
 
-	printf(cudaGetErrorString(cudaGetLastError()));
+	//printf(cudaGetErrorString(cudaGetLastError()));
 	printf("\n");
 	time_gpu_f = (float)(end_time - start_time) / CLOCKS_PER_SEC;
 
@@ -156,7 +162,14 @@ int main(int argc, char **argv) {
 	printf("time_omp_f: %10.4g\n", time_omp_f);
 	printf(checkResult(res_omp, res, N) ? "omp_eq\n" : "omp not eq\n");
 	printf(checkResult(res, res_gpu_host, N) ? "Equal\n": "Not Equal\n");
-	cudaFree(x_gpu); cudaFree(y_gpu); cudaFree(res_gpu);
-	free(x); free(y); free(res);
+	printf("time_d: %6.4g\n", time_cpu_d);
+	printf("time_gpu_d: %10.4g\n", time_gpu_d);
+	printf("time_omp_d: %10.4g\n", time_omp_d);
+	printf(checkResult(res_omp_d, res_d, N) ? "omp_eq\n" : "omp not eq\n");
+	printf(checkResult(res_d, res_gpu_host_d, N) ? "Equal\n" : "Not Equal\n");
+	cudaFree(x_gpu_d); cudaFree(y_gpu_d); cudaFree(res_gpu_d);
+	free(x_d); free(y_d); free(res_d);
+	cudaFree(x_gpu_d); cudaFree(y_gpu_d); cudaFree(res_gpu_d);
+	free(x_d); free(y_d); free(res_d);
 	return 0;
 }

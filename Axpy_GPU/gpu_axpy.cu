@@ -1,4 +1,5 @@
 #include "gpu_axpy.cuh"
+#include "device_launch_parameters.h"
 
 __global__ void saxpy_gpu(int n, const float a, const float *x, int incx, const float *y, int incy, float *res) {
 	
